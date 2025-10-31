@@ -1,4 +1,4 @@
- module.exports = (sequelize, Sequelize) => {
+module.exports = (sequelize, Sequelize) => {
   const Pollution = sequelize.define("pollution", {
     id: {
       type: Sequelize.INTEGER,
@@ -6,7 +6,7 @@
       allowNull: false,
       autoIncrement: true
     },
-    nom: {
+    titre: {
       type: Sequelize.STRING,
       allowNull: false
     },
