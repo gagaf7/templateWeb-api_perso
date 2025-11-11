@@ -1,12 +1,15 @@
-
 module.exports = app => {
-    const pollution = require("../controllers/utilisateur.controllers.js");
-  
-    var router = require("express").Router();
-  
+  const utilisateurController = require("../controllers/utilisateur.controllers.js");
 
-   
-    router.get("/", pollution.get);
-  
-    app.use('/api/pollution', router);
-  };
+  var router = require("express").Router();
+
+  router.post("/", utilisateurController.create);
+  router.get("/", utilisateurController.findAll);
+  router.get("/:id", utilisateurController.findOne);
+  router.put("/:id", utilisateurController.update);
+  router.delete("/:id", utilisateurController.delete);
+  router.post("/login", utilisateurController.login);
+  router.post("/signup", utilisateurController.signup);
+
+  app.use('/api/users', router);
+};
