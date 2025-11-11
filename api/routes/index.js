@@ -1,4 +1,4 @@
-module.exports = app => {  
-  require("./pollution.routes")(app);
-  require("./utilisateur.routes")(app);
-}
+module.exports = app => {
+    require('./pollution.routes.js')(app);
+    require('./utilisateur.routes.js')(app);
+};

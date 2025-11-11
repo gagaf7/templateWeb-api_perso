@@ -1,13 +1,13 @@
-
-
 module.exports = app => {
-    const pollution = require("../controllers/pollution.controllers.js");
+    const pollutionController = require("../controllers/pollution.controllers.js");
   
     var router = require("express").Router();
   
-
-   
-    router.get("/", pollution.get);
+    router.get("/", pollutionController.get);
+    router.post("/", pollutionController.create);
+    router.get("/:id", pollutionController.getById);
+    router.put("/:id", pollutionController.update);
+    router.delete("/:id", pollutionController.delete);
   
-    app.use('/api/pollution', router);
-  };
+    app.use('/api/pollutions', router);
+};
