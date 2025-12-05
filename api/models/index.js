@@ -1,17 +1,25 @@
-const { Sequelize } = require ("sequelize");
-const { BDD }  = require ('../config');
-const sequelize = new Sequelize(`postgres://${BDD.user}:${BDD.password}@${BDD.host}/${BDD.bdname}`
-,{
-    dialect: 'postgres',
-    protocol: 'postgres',
-    dialectOptions: {
-      ssl: true,
-      native:true
-    },
-    define:  {
-    	timestamps:false
+const config = require("../config.js");
+const Sequelize = require("sequelize");
+
+console.log("Connecting to database:", config.DB);
+
+const sequelize = new Sequelize(
+  config.DB,
+  config.USER,
+  config.PASSWORD,
+  {
+    host: config.HOST,
+    port: config.BDD.port,
+    dialect: config.dialect,
+    operatorsAliases: false,
+    pool: {
+      max: config.pool.max,
+      min: config.pool.min,
+      acquire: config.pool.acquire,
+      idle: config.pool.idle
     }
-  });
+  }
+);
 
 const db = {};
 
@@ -19,5 +27,6 @@ db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
 db.pollution = require("./pollution.model.js")(sequelize, Sequelize);
+db.utilisateur = require("./utilisateur.model.js")(sequelize, Sequelize);
 
 module.exports = db;

@@ -1,25 +1,28 @@
 module.exports = (sequelize, Sequelize) => {
-  const Pollution = sequelize.define("pollution", {
+  const Utilisateur = sequelize.define("utilisateur", {
     id: {
       type: Sequelize.INTEGER,
       primaryKey: true,
-      allowNull: false,
       autoIncrement: true
     },
-    nom: {
+    username: {
+      type: Sequelize.STRING,
+      allowNull: false,
+      unique: true
+    },
+    email: {
+      type: Sequelize.STRING,
+      allowNull: false,
+      unique: true
+    },
+    password: {
       type: Sequelize.STRING,
       allowNull: false
-    },
-    prenom: {
-      type: Sequelize.STRING
-    },
-    login: {
-      type: Sequelize.STRING
-    },
-    pass: {
-      type: Sequelize.DATE
+    }
   }, {
+    tableName: 'utilisateurs',
+    timestamps: false
   });
 
-  return Pollution;
+  return Utilisateur;
 };

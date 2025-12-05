@@ -12,13 +12,13 @@ exports.create = (req, res) => {
 
   const pollution = {
     titre: req.body.titre,
-    type: req.body.type,
+    type_pollution: req.body.type,
     description: req.body.description,
-    dateObservation: req.body.dateObservation,
+    date_observation: req.body.dateObservation,
     lieu: req.body.lieu,
     latitude: req.body.latitude,
     longitude: req.body.longitude,
-    photoUrl: req.body.photoUrl
+    photo_url: req.body.photoUrl
   };
 
   Pollution.create(pollution)
@@ -72,7 +72,18 @@ exports.findOne = (req, res) => {
 exports.update = (req, res) => {
   const id = req.params.id;
 
-  Pollution.update(req.body, {
+  const pollution = {
+    titre: req.body.titre,
+    type_pollution: req.body.type,
+    description: req.body.description,
+    date_observation: req.body.dateObservation,
+    lieu: req.body.lieu,
+    latitude: req.body.latitude,
+    longitude: req.body.longitude,
+    photo_url: req.body.photoUrl
+  };
+
+  Pollution.update(pollution, {
     where: { id: id }
   })
     .then(num => {

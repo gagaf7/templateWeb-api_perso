@@ -3,36 +3,58 @@ module.exports = (sequelize, Sequelize) => {
     id: {
       type: Sequelize.INTEGER,
       primaryKey: true,
-      allowNull: false,
       autoIncrement: true
     },
     titre: {
-      type: Sequelize.STRING,
+      type: Sequelize.TEXT,
       allowNull: false
     },
-    lieu: {
-      type: Sequelize.STRING
-    },
-    dateObservation: {
-      type: Sequelize.DATE
-    },
-    typePollution: {
-      type: Sequelize.STRING
+    type_pollution: {
+      type: Sequelize.ENUM('Plastique', 'Chimique', 'Dépôt sauvage', 'Eau', 'Air', 'Autre'),
+      allowNull: false,
+      field: 'type_pollution'
     },
     description: {
-      type: Sequelize.TEXT
+      type: Sequelize.TEXT,
+      allowNull: false
+    },
+    date_observation: {
+      type: Sequelize.DATEONLY,
+      allowNull: false,
+      field: 'date_observation'
+    },
+    lieu: {
+      type: Sequelize.TEXT,
+      allowNull: false
     },
     latitude: {
-      // stocke les coordonnées GPS avec 6 décimales
-      type: Sequelize.DECIMAL(9,6)
+      type: Sequelize.DOUBLE,
+      allowNull: false
     },
     longitude: {
-      type: Sequelize.DECIMAL(9,6)
+      type: Sequelize.DOUBLE,
+      allowNull: false
     },
-    imageUrl: {
-      type: Sequelize.STRING
+    photo_url: {
+      type: Sequelize.TEXT,
+      field: 'photo_url'
+    },
+    created_at: {
+      type: Sequelize.DATE,
+      defaultValue: Sequelize.NOW,
+      field: 'created_at'
+    },
+    updated_at: {
+      type: Sequelize.DATE,
+      defaultValue: Sequelize.NOW,
+      field: 'updated_at'
     }
   }, {
+    tableName: 'pollutions',
+    timestamps: true,
+    underscored: true,
+    createdAt: 'created_at',
+    updatedAt: 'updated_at'
   });
 
   return Pollution;
