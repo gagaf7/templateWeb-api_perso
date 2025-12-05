@@ -17,6 +17,13 @@ const sequelize = new Sequelize(
       min: config.pool.min,
       acquire: config.pool.acquire,
       idle: config.pool.idle
+    },
+    // AJOUTEZ CE BLOC POUR ACTIVER LE SSL REQUIS PAR RENDER
+    dialectOptions: {
+      ssl: {
+        require: true,
+        rejectUnauthorized: false // Nécessaire pour accepter les certificats auto-signés de Render
+      }
     }
   }
 );
