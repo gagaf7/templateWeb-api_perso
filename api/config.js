@@ -1,17 +1,17 @@
 module.exports =  {
     ACCESS_TOKEN_SECRET : "EMMA123",
     BDD : {
-    "host" :"dpg-d4ph5mili9vc739bn0bg-a.oregon-postgres.render.com",
+    "host" :"dpg-d5g0m5qli9vc73dsucvg-a.oregon-postgres.render.com",
     "port" : "5432",
-    "user" : "pollutionbasev2_user",
-    "password" : "Q6Ykmu2azx0YGSjz69zB6Ym5gdkoIpG7",
-    "bdname" :"pollutionbasev2" 
+    "user" : "pollutionbasev3_user",
+    "password" : "UxDFEqKXE5CDfNoYMdqK6LTfpxepV1W6",
+    "bdname" :"pollutionbasev3" 
     },
     // Propriétés pour Sequelize
-    HOST: "dpg-d4ph5mili9vc739bn0bg-a.oregon-postgres.render.com",
-    USER: "pollutionbasev2_user",
-    PASSWORD: "Q6Ykmu2azx0YGSjz69zB6Ym5gdkoIpG7",
-    DB: "pollutionbasev2",
+    HOST: "dpg-d5g0m5qli9vc73dsucvg-a.oregon-postgres.render.com",
+    USER: "pollutionbasev3_user",
+    PASSWORD: "UxDFEqKXE5CDfNoYMdqK6LTfpxepV1W6",
+    DB: "pollutionbasev3",
     dialect: "postgres",
     pool: {
       max: 5,
@@ -20,4 +20,3 @@ module.exports =  {
       idle: 10000
     }
 };
-

@@ -1,5 +1,13 @@
 const db = require("../models");
 const Utilisateur = db.utilisateur;
+const Pollution = db.pollution; // Assurez-vous d'importer Pollution
+
+const jwt = require('jsonwebtoken');
+const { ACCESS_TOKEN_SECRET } = require("../config.js");
+
+function generateAccessToken(user) {
+  return jwt.sign(user, ACCESS_TOKEN_SECRET, { expiresIn: '1800s' });
+}
 
 // Create a new Utilisateur
 exports.create = (req, res) => {
@@ -131,13 +139,18 @@ exports.login = (req, res) => {
           message: "Invalid password!"
         });
       } else {
+        const user = {
+          id: data.id,
+          username: data.username,
+          email: data.email
+        };
+        
+        let accessToken = generateAccessToken(user);
+        res.setHeader('Authorization', `Bearer ${accessToken}`);
+        
         res.send({
           message: "Login successful!",
-          utilisateur: {
-            id: data.id,
-            username: data.username,
-            email: data.email
-          }
+          utilisateur: user
         });
       }
     })
@@ -180,5 +193,83 @@ exports.signup = (req, res) => {
         message:
           err.message || "Some error occurred while creating the utilisateur."
       });
+    });
+};
+
+// Add a favorite
+exports.addFavorite = (req, res) => {
+  const userId = req.params.id;
+  const pollutionId = req.body.pollutionId;
+
+  Utilisateur.findByPk(userId)
+    .then(user => {
+      if (!user) {
+        res.status(404).send({ message: "User not found" });
+        return;
+      }
+      return Pollution.findByPk(pollutionId).then(pollution => {
+        if (!pollution) {
+          res.status(404).send({ message: "Pollution not found" });
+          return;
+        }
+        user.addFavorites(pollution);
+        res.send({ message: "Added to favorites" });
+      });
+    })
+    .catch(err => {
+      res.status(500).send({ message: err.message });
+    });
+};
+
+// Remove a favorite
+exports.removeFavorite = (req, res) => {
+  const userId = req.params.id;
+  const pollutionId = req.params.pollutionId;
+
+  Utilisateur.findByPk(userId)
+    .then(user => {
+      if (!user) {
+        res.status(404).send({ message: "User not found" });
+        return;
+      }
+      return Pollution.findByPk(pollutionId).then(pollution => {
+        if (!pollution) {
+          res.status(404).send({ message: "Pollution not found" });
+          return;
+        }
+        user.removeFavorites(pollution);
+        res.send({ message: "Removed from favorites" });
+      });
+    })
+    .catch(err => {
+      res.status(500).send({ message: err.message });
+    });
+};
+
+// Get user favorites
+exports.getFavorites = (req, res) => {
+  const userId = req.params.id;
+
+  Utilisateur.findByPk(userId, {
+    include: [
+      {
+        model: Pollution,
+        as: "favorites",
+        attributes: ["id", "titre", "type_pollution", "description", "date_observation", "lieu", "latitude", "longitude", "photo_url"],
+        through: {
+          attributes: [],
+        }
+      },
+    ],
+  })
+    .then(user => {
+      if (!user) {
+        res.status(404).send({ message: "User not found" });
+        return;
+      }
+      res.send(user.favorites);
+    })
+    .catch(err => {
+      res.status(500).send({ message: err.message });
     });
 };

@@ -10,6 +10,11 @@ module.exports = app => {
   router.delete("/:id", utilisateurController.delete);
   router.post("/login", utilisateurController.login);
   router.post("/signup", utilisateurController.signup);
+  
+  // Routes Favoris
+  router.post("/:id/favorites", utilisateurController.addFavorite);
+  router.delete("/:id/favorites/:pollutionId", utilisateurController.removeFavorite);
+  router.get("/:id/favorites", utilisateurController.getFavorites);
 
   app.use('/api/users', router);
 };

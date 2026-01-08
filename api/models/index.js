@@ -36,4 +36,16 @@ db.sequelize = sequelize;
 db.pollution = require("./pollution.model.js")(sequelize, Sequelize);
 db.utilisateur = require("./utilisateur.model.js")(sequelize, Sequelize);
 
+// AJOUTEZ CES LIGNES POUR LA RELATION FAVORIS
+db.utilisateur.belongsToMany(db.pollution, {
+  through: "user_favorites",
+  as: "favorites",
+  foreignKey: "userId",
+});
+db.pollution.belongsToMany(db.utilisateur, {
+  through: "user_favorites",
+  as: "favoritedBy",
+  foreignKey: "pollutionId",
+});
+
 module.exports = db;
