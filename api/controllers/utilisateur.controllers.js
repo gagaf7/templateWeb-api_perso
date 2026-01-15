@@ -179,13 +179,20 @@ exports.signup = (req, res) => {
 
   Utilisateur.create(utilisateur)
     .then(data => {
+      const user = {
+        id: data.id,
+        username: data.username,
+        email: data.email
+      };
+      
+      // Générer un token pour l'utilisateur nouvellement créé
+      let accessToken = generateAccessToken(user);
+      res.setHeader('Authorization', `Bearer ${accessToken}`);
+      
       res.send({
         message: "Utilisateur created successfully!",
-        utilisateur: {
-          id: data.id,
-          username: data.username,
-          email: data.email
-        }
+        utilisateur: user,
+        token: accessToken
       });
     })
     .catch(err => {
