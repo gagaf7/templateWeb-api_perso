@@ -1,13 +1,16 @@
 const express = require("express");
 const cors = require("cors");
+const cookieParser = require("cookie-parser");
 require("dotenv").config();
 
 const app = express();
 
 // middleware
 app.use(cors({
-  exposedHeaders: ['Authorization']
+  origin: 'http://localhost:4200', // URL de votre frontend Angular
+  credentials: true // Permet l'envoi de cookies
 }));
+app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 

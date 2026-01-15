@@ -10,6 +10,7 @@ module.exports = app => {
   router.delete("/:id", utilisateurController.delete);
   router.post("/login", utilisateurController.login);
   router.post("/signup", utilisateurController.signup);
+  router.post("/logout", utilisateurController.logout);
   
   // Routes Favoris
   router.post("/:id/favorites", utilisateurController.addFavorite);

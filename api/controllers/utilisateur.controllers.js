@@ -146,7 +146,14 @@ exports.login = (req, res) => {
         };
         
         let accessToken = generateAccessToken(user);
-        res.setHeader('Authorization', `Bearer ${accessToken}`);
+        
+        // Envoyer le token dans un cookie HttpOnly (sécurisé)
+        res.cookie('authToken', accessToken, {
+          httpOnly: true,  // Inaccessible via JavaScript
+          secure: process.env.NODE_ENV === 'production', // HTTPS uniquement en production
+          sameSite: 'strict', // Protection CSRF
+          maxAge: 30 * 60 * 1000 // 30 minutes
+        });
         
         res.send({
           message: "Login successful!",
@@ -187,12 +194,18 @@ exports.signup = (req, res) => {
       
       // Générer un token pour l'utilisateur nouvellement créé
       let accessToken = generateAccessToken(user);
-      res.setHeader('Authorization', `Bearer ${accessToken}`);
+      
+      // Envoyer le token dans un cookie HttpOnly (sécurisé)
+      res.cookie('authToken', accessToken, {
+        httpOnly: true,  // Inaccessible via JavaScript
+        secure: process.env.NODE_ENV === 'production', // HTTPS uniquement en production
+        sameSite: 'strict', // Protection CSRF
+        maxAge: 30 * 60 * 1000 // 30 minutes
+      });
       
       res.send({
         message: "Utilisateur created successfully!",
-        utilisateur: user,
-        token: accessToken
+        utilisateur: user
       });
     })
     .catch(err => {
@@ -279,4 +292,14 @@ exports.getFavorites = (req, res) => {
     .catch(err => {
       res.status(500).send({ message: err.message });
     });
+};
+
+// Logout - Clear the auth cookie
+exports.logout = (req, res) => {
+  res.clearCookie('authToken', {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'strict'
+  });
+  res.send({ message: "Logged out successfully" });
 };

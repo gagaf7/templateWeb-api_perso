@@ -3,25 +3,18 @@ const { ACCESS_TOKEN_SECRET } = require("../config.js");
 
 module.exports = {
   checkJwt: (req, res, next) => {
-    // Get the JWT from the request header.
-    const token = req.headers['authorization'];
+    // Get the JWT from the cookie instead of the header
+    const token = req.cookies.authToken;
     let jwtPayload;
 
     // Validate the token and retrieve its data.
     try {
-      // The header is usually "Bearer <token>"
-      // So we split by space and take the second part
       if (!token) {
         throw new Error("No token provided");
       }
-      
-      let jwtBearer = token.split(' ')[1];
-      if (!jwtBearer) {
-        throw new Error("No Bearer token found");
-      }
 
-      console.log("Authorization: " + jwtBearer);
-      jwtPayload = jwt.verify(jwtBearer, ACCESS_TOKEN_SECRET, {
+      console.log("Token from cookie: " + token);
+      jwtPayload = jwt.verify(token, ACCESS_TOKEN_SECRET, {
         complete: true,
         algorithms: ['HS256'],
         clockTolerance: 0,
