@@ -148,10 +148,12 @@ exports.login = (req, res) => {
         let accessToken = generateAccessToken(user);
         
         // Envoyer le token dans un cookie HttpOnly (sécurisé)
+        const isProduction = process.env.NODE_ENV === 'production';
         res.cookie('authToken', accessToken, {
           httpOnly: true,  // Inaccessible via JavaScript
-          secure: process.env.NODE_ENV === 'production', // HTTPS uniquement en production
-          sameSite: 'lax', // Protection CSRF (lax pour POST cross-origin)
+          secure: isProduction, // true en production (HTTPS), false en dev
+          sameSite: isProduction ? 'none' : 'lax', // 'none' requis pour cross-origin en prod
+          path: '/',
           maxAge: 30 * 60 * 1000 // 30 minutes
         });
         
@@ -196,10 +198,12 @@ exports.signup = (req, res) => {
       let accessToken = generateAccessToken(user);
       
       // Envoyer le token dans un cookie HttpOnly (sécurisé)
+      const isProduction = process.env.NODE_ENV === 'production';
       res.cookie('authToken', accessToken, {
         httpOnly: true,  // Inaccessible via JavaScript
-        secure: process.env.NODE_ENV === 'production', // HTTPS uniquement en production
-        sameSite: 'lax', // Protection CSRF (lax pour POST cross-origin)
+        secure: isProduction, // true en production (HTTPS), false en dev
+        sameSite: isProduction ? 'none' : 'lax', // 'none' requis pour cross-origin en prod
+        path: '/',
         maxAge: 30 * 60 * 1000 // 30 minutes
       });
       
@@ -296,10 +300,12 @@ exports.getFavorites = (req, res) => {
 
 // Logout - Clear the auth cookie
 exports.logout = (req, res) => {
+  const isProduction = process.env.NODE_ENV === 'production';
   res.clearCookie('authToken', {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'lax'
+    secure: isProduction,
+    sameSite: isProduction ? 'none' : 'lax',
+    path: '/'
   });
   res.send({ message: "Logged out successfully" });
 };
