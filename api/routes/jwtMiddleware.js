@@ -4,12 +4,16 @@ const { ACCESS_TOKEN_SECRET } = require("../config.js");
 module.exports = {
   checkJwt: (req, res, next) => {
     // Get the JWT from the cookie instead of the header
+    console.log('=== JWT Middleware Debug ===');
+    console.log('All cookies:', req.cookies);
     const token = req.cookies.authToken;
+    console.log('authToken from cookie:', token);
     let jwtPayload;
 
     // Validate the token and retrieve its data.
     try {
       if (!token) {
+        console.error('No token found in cookies');
         throw new Error("No token provided");
       }
 
@@ -21,10 +25,11 @@ module.exports = {
         ignoreExpiration: false,
         ignoreNotBefore: false
       });
+      console.log('Token verified successfully:', jwtPayload);
       // Add the payload to the request so controllers may access it.
       req.token = jwtPayload;
     } catch (error) {
-      console.log(error);
+      console.error('JWT verification error:', error.message);
       res.status(401)
         .type('json')
         .send(JSON.stringify({ message: 'Missing or invalid token' }));

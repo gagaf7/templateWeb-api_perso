@@ -151,7 +151,7 @@ exports.login = (req, res) => {
         res.cookie('authToken', accessToken, {
           httpOnly: true,  // Inaccessible via JavaScript
           secure: process.env.NODE_ENV === 'production', // HTTPS uniquement en production
-          sameSite: 'strict', // Protection CSRF
+          sameSite: 'lax', // Protection CSRF (lax pour POST cross-origin)
           maxAge: 30 * 60 * 1000 // 30 minutes
         });
         
@@ -199,7 +199,7 @@ exports.signup = (req, res) => {
       res.cookie('authToken', accessToken, {
         httpOnly: true,  // Inaccessible via JavaScript
         secure: process.env.NODE_ENV === 'production', // HTTPS uniquement en production
-        sameSite: 'strict', // Protection CSRF
+        sameSite: 'lax', // Protection CSRF (lax pour POST cross-origin)
         maxAge: 30 * 60 * 1000 // 30 minutes
       });
       
@@ -299,7 +299,7 @@ exports.logout = (req, res) => {
   res.clearCookie('authToken', {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
-    sameSite: 'strict'
+    sameSite: 'lax'
   });
   res.send({ message: "Logged out successfully" });
 };
