@@ -7,7 +7,10 @@ const app = express();
 
 // middleware
 app.use(cors({
-  origin: 'http://localhost:4200', // URL de votre frontend Angular
+  origin: [
+    'http://localhost:4200', // URL du frontend Angular en développement
+    'https://projet-kremser-gaetan.onrender.com' // URL du frontend Angular en production
+  ],
   credentials: true // Permet l'envoi de cookies
 }));
 app.use(cookieParser());
