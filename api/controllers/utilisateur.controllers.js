@@ -172,7 +172,10 @@ exports.login = (req, res) => {
 
 // Signup
 exports.signup = (req, res) => {
+  console.log('Signup request received:', req.body);
+  
   if (!req.body.username || !req.body.email || !req.body.password) {
+    console.log('Missing fields in signup request');
     res.status(400).send({
       message: "Username, email and password are required!"
     });
@@ -184,6 +187,8 @@ exports.signup = (req, res) => {
     email: req.body.email,
     password: req.body.password
   };
+
+  console.log('Attempting to create user:', { username: utilisateur.username, email: utilisateur.email });
 
   Utilisateur.create(utilisateur)
     .then(data => {
