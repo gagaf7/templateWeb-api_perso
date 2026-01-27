@@ -11,8 +11,8 @@ app.use(cors({
   credentials: true // Permet l'envoi de cookies
 }));
 app.use(cookieParser());
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ limit: '10mb' })); // Increased for Base64 images
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 // database
 const db = require("./models");
