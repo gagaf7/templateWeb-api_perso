@@ -211,10 +211,19 @@ exports.signup = (req, res) => {
       });
     })
     .catch(err => {
-      res.status(500).send({
-        message:
-          err.message || "Some error occurred while creating the utilisateur."
-      });
+      console.error('Signup error:', err);
+      
+      // Gérer les erreurs de contrainte unique (email ou username déjà existant)
+      if (err.name === 'SequelizeUniqueConstraintError') {
+        const field = err.errors[0].path;
+        res.status(409).send({
+          message: `This ${field} is already in use.`
+        });
+      } else {
+        res.status(500).send({
+          message: err.message || "Some error occurred while creating the utilisateur."
+        });
+      }
     });
 };
 
